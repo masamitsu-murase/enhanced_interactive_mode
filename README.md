@@ -1,5 +1,7 @@
 # Enhanced Interactive mode
 
+This supports Windows only.
+
 ```bat
 @goto BAT
 
