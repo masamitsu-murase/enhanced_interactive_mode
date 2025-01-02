@@ -3,8 +3,6 @@ from _pyrepl import commands, reader
 
 from .help_text import find_help_text, find_token_name
 
-console_completion_highlight_color = "white"
-
 
 class show_help(commands.Command):
     def do(self):
@@ -44,5 +42,4 @@ def apply_patch(*, completion_highlight_color=None):
     )
 
     if completion_highlight_color:
-        global console_completion_highlight_color
-        console_completion_highlight_color = completion_highlight_color
+        raise ValueError("colorized completion is not supported.")
