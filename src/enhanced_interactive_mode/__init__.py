@@ -1,7 +1,10 @@
 import inspect
 from rlcompleter import Completer
 
-from .pyreadline_patch import apply_patch
+try:
+    from .pyrepl_reader_patch import apply_patch
+except ImportError:
+    from .pyreadline_patch import apply_patch
 
 
 def _callable_postfix(self, val, word):
