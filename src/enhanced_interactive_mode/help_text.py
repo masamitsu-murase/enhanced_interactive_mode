@@ -67,4 +67,17 @@ def find_help_text(value, parent, attr_str):
     if doc:
         return TITLE % desc + "\n\n" + textwrap.indent(doc, " " * 4)
 
+    parent_class = type(parent)
+    if parent_class and hasattr(parent_class, attr_str):
+        class_value = getattr(parent_class, attr_str)
+        desc = (
+            f"attribute {attr_str} of "
+            + f"{parent_class.__module__}.{parent_class.__name__}"
+        )
+        doc = find_docstring_for_class_attr(parent_class, attr_str)
+        if doc:
+            return TITLE % desc + "\n\n" + textwrap.indent(doc, " " * 4)
+        else:
+            return pydoc_render_doc(class_value)
+
     return pydoc_render_doc(value)

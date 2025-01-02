@@ -53,22 +53,28 @@ def find_docstring_for_toplevel_assign_expr_pair(statements, attr_str):
     return None
 
 
-def find_docstring_for_class_attr(cls, attr_str):
-    try:
-        source = inspect.getsource(cls)
-    except TypeError:
-        return None
+def find_docstring_for_class_attr(class_value, attr_str):
+    for cls in inspect.getmro(class_value):
+        try:
+            source = inspect.getsource(cls)
+        except TypeError:
+            continue
 
-    source = textwrap.dedent(source)
-    cls_ast = ast.parse(source)
+        source = textwrap.dedent(source)
+        cls_ast = ast.parse(source)
 
-    class_def = cls_ast.body[0]
-    if not isinstance(class_def, ast.ClassDef):
-        return None
+        class_def = cls_ast.body[0]
+        if not isinstance(class_def, ast.ClassDef):
+            continue
 
-    return find_docstring_for_toplevel_assign_expr_pair(
-        class_def.body, attr_str
-    )
+        doc = find_docstring_for_toplevel_assign_expr_pair(
+            class_def.body, attr_str
+        )
+        if not doc:
+            continue
+        return doc
+
+    return None
 
 
 def find_docstring_for_module_variable(mod, var_str):
