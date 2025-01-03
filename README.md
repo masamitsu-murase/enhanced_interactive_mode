@@ -1,19 +1,24 @@
 # Enhanced Interactive mode
 
-This supports Windows only.
+F12 key shows help message in Python interactive mode.
 
-```bat
-@goto BAT
+## Usage
 
-import enhanced_interactive_mode
+```bash
+$ python -i startup.py
+>>> import sample
+>>> sample.A
+sample.A: <class 'sample.A'>
+Help for class A in module sample
 
-enhanced_interactive_mode.init(completion_highlight_color="cyan")
+class sample.A(builtins.object):
+    (No document)
 
-"""
-:BAT
-@echo off
-cd /d "%~dp0"
-python -x -i "%~f0"
-exit /b %ERRORLEVEL%
-"""
+--------------------------------
+Help for wrapper_descriptor
+
+__init__(self, /, *args, **kwargs) unbound builtins.object method
+    Initialize self.  See help(type(self)) for accurate signature.
 ```
+
+![example](./images/sample.gif)

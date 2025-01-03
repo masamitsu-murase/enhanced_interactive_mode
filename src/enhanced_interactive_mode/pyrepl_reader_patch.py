@@ -1,5 +1,6 @@
 import __main__
 from _pyrepl import commands, reader
+import reprlib
 
 from .help_text import find_help_text, find_token_name
 
@@ -30,6 +31,8 @@ class show_help(commands.Command):
         help_text = find_help_text(value, parent, attr_str)
         if not help_text:
             return
+
+        help_text = f"{token_str}: {reprlib.repr(value)}\n{help_text}"
 
         r.msg = help_text
         r.dirty = True

@@ -2,12 +2,14 @@ import __main__
 import math
 import pydoc
 import readline
+import reprlib
 
 from pyreadline.console.ansi import AnsiState
 from pyreadline.modes.basemode import BaseMode, commonprefix
 
 from .help_text import find_help_text, find_token_name
 
+SEPARATOR = "=" * 32
 console_completion_highlight_color = "white"
 
 
@@ -37,7 +39,10 @@ def show_help(self: BaseMode, e):
     if not help_text:
         return
 
-    help_text = "\n" + "=" * 32 + "\n" + help_text + "\n" + "=" * 32 + "\n"
+    help_text = (
+        f"\n{token_str}: {reprlib.repr(value)}\n"
+        + f"{SEPARATOR}\n{help_text}\n{SEPARATOR}\n"
+    )
 
     _, height = self.console.size()
     if help_text.count("\n") > height + 5:
@@ -65,7 +70,7 @@ def _display_completions(self, completions):
             if i < len(completions):
                 cmd = completions[i]
                 self.console.write(cmd[: len(prefix)])
-                highlighted = cmd[len(prefix):len(prefix) + 1]
+                highlighted = cmd[len(prefix) : len(prefix) + 1]
                 if highlighted:
                     self.console.write_color(
                         highlighted,
@@ -73,7 +78,7 @@ def _display_completions(self, completions):
                             color=console_completion_highlight_color
                         ),
                     )
-                rest = cmd.ljust(wmax + 1)[len(prefix) + len(highlighted):]
+                rest = cmd.ljust(wmax + 1)[len(prefix) + len(highlighted) :]
                 self.console.write(rest)
         self.console.write("\n")
     self._print_prompt()
